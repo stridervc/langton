@@ -209,16 +209,25 @@ void	updateZoom(int antx, int anty, char *field, SDL_Surface *zoomSurface, int &
 	}
 
 	// should we recalculate our zoom x,y start position?
-	if (antx < zoomx || anty < zoomy) {
+	if ((antx < zoomx) || (anty < zoomy) || (antx > zoomx + FWIDTH/ZOOM) || (anty > zoomy + FHEIGHT/ZOOM)) {
 		zoomx = antx - FWIDTH/2/ZOOM;
 		zoomy = anty - FHEIGHT/2/ZOOM;
+
+		if (zoomx < 0)
+			zoomx = 0;
+		if (zoomy < 0)
+			zoomy = 0;
+		if (zoomx > FWIDTH - FWIDTH/2/ZOOM)
+			zoomx = FWIDTH - FWIDTH/2/ZOOM;
+		if (zoomy > FHEIGHT - FHEIGHT/2/ZOOM)
+			zoomy = FHEIGHT - FHEIGHT/2/ZOOM;
 	}
 
 	// draw zoomed in field
 	y = 0;
-	for (fy = anty - FHEIGHT/2/ZOOM; fy < anty + FHEIGHT/2/ZOOM; fy++) {
+	for (fy = zoomy; fy < zoomy + FHEIGHT/ZOOM; fy++) {
 		x = 0;
-		for (fx = antx - FWIDTH/2/ZOOM; fx < antx + FWIDTH/2/ZOOM; fx++) {
+		for (fx = zoomx; fx < zoomx + FWIDTH/ZOOM; fx++) {
 			fvalue = field[fy*FWIDTH+fx];
 			for (ny = 0; ny < ZOOM; ny++) {
 				for (nx = 0; nx < ZOOM; nx++) {
@@ -230,10 +239,12 @@ void	updateZoom(int antx, int anty, char *field, SDL_Surface *zoomSurface, int &
 		y++;
 	}
 
-	// draw ant in middle of surface
-	for (y = FHEIGHT/2 - ZOOM/2; y < FHEIGHT/2 + ZOOM/2; y++) {
-		for (x = FWIDTH/2 - ZOOM/2; x < FWIDTH/2 + ZOOM/2; x++) {
-			putpixel(zoomSurface, x, y, 255, 0, 0);
+	// draw ant
+	int nantx = antx - zoomx;
+	int nanty = anty - zoomy;
+	for (y = 0; y < ZOOM; y++) {
+		for (x = 0; x < ZOOM; x++) {
+			putpixel(zoomSurface, nantx*ZOOM+x, nanty*ZOOM+y, 255, 0, 0);
 		}
 	}
 }
