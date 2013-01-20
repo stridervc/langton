@@ -217,10 +217,10 @@ void	updateZoom(int antx, int anty, char *field, SDL_Surface *zoomSurface, int &
 			zoomx = 0;
 		if (zoomy < 0)
 			zoomy = 0;
-		if (zoomx > FWIDTH - FWIDTH/2/ZOOM)
-			zoomx = FWIDTH - FWIDTH/2/ZOOM;
-		if (zoomy > FHEIGHT - FHEIGHT/2/ZOOM)
-			zoomy = FHEIGHT - FHEIGHT/2/ZOOM;
+		if (zoomx > FWIDTH - FWIDTH/ZOOM)
+			zoomx = FWIDTH - FWIDTH/ZOOM;
+		if (zoomy > FHEIGHT - FHEIGHT/ZOOM)
+			zoomy = FHEIGHT - FHEIGHT/ZOOM;
 	}
 
 	// draw zoomed in field
